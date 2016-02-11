@@ -95,13 +95,19 @@
       var Timetable = (function(){
         var Timetable = function($root, data){
           this.$root = $root;
+          this.$content = $('<div/>');
           this.$hours = $('<div/>');
+          this.$hallsWrap = $('<div/>');
           this.$halls = $('<div/>');
+          this.$content.addClass('timetable-content');
           this.$hours.addClass('timetable-hours');
+          this.$hallsWrap.addClass('timetable-halls-wrap');
           this.$halls.addClass('timetable-halls');
-          this.$root
+          this.$hallsWrap.append(this.$halls);
+          this.$content
             .append(this.$hours)
-            .append(this.$halls);
+            .append(this.$hallsWrap);
+          this.$root.append(this.$content);
 
           this.data = data;
 
@@ -142,11 +148,17 @@
           }
         };
 
+        Timetable.prototype.countHallsWidth = function(){
+          var hallWidth = this.$halls.children().eq(0).width();
+          this.$halls.width(this.data.length * hallWidth);
+        };
+
         Timetable.prototype.showEvents = function(){
           for(var i = 0, l = this.data.length; i < l; i++){
             var hall = new Hall(this.data[i]);
             this.$halls.append(hall.getNode());
           }
+          this.countHallsWidth();
         };
 
 
