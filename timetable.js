@@ -31,10 +31,10 @@
           return this.$node;
         };
 
-        Event.prototype.updatePosition = function(startHour){
+        Event.prototype.updatePosition = function(){
           var top = 0,
               height = 0;
-          startHour = startHour || 0;
+          startHour = options.minHour || 0;
           top += (this.start.getHours() - startHour);
           top += this.start.getMinutes() / 60;
           top = top * options.hourHeight;
@@ -94,29 +94,61 @@
 
       var Timetable = (function(){
         var Timetable = function($root, data){
-          var $hours = $('<div/>'),
-              $halls = $('<div/>');
-          $hours.addClass('timetable-hours');
-          $halls.addClass('timetable-halls');
-          $root
-            .append($hours)
-            .append($halls);
-            
-          for(var i = 0, l = data.length; i < l; i++){
-            var hall = new Hall(data[i]);
-            $halls.append(hall.getNode());
+          this.$root = $root;
+          this.$hours = $('<div/>');
+          this.$halls = $('<div/>');
+          this.$hours.addClass('timetable-hours');
+          this.$halls.addClass('timetable-halls');
+          this.$root
+            .append(this.$hours)
+            .append(this.$halls);
+
+          this.data = data;
+
+          this.updateHoursScope();
+          this.renderHours();
+          this.showEvents();
+        };
+
+        Timetable.prototype.updateHoursScope = function(){
+          var minHour = 23,
+              maxHour = 0;
+          for(var i = 0, l = this.data.length; i < l; i++){
+            for (var eI = 0; eI < this.data[i].events.length; eI++){
+              var event = this.data[i].events[eI],
+                  start = new Date(event.start),
+                  end = new Date(event.end);
+              if(start.getHours() < minHour)
+                minHour = start.getHours();
+              if(end.getHours() > maxHour)
+                maxHour = end.getHours();
+
+            }
           }
-          for(var hourI = 0; hourI < 24; hourI++){
+          options.minHour = minHour;
+          options.maxHour = maxHour;
+        };
+
+        Timetable.prototype.renderHours = function(){
+          for(var i = options.minHour; i <= options.maxHour; i++){
             var $hour = $('<div/>');
             $hour.addClass('timetable-hour');
 
-            $hour.append('<span class=""timetable-hour-label>' + hourI + ':00</span>');
-            $hours.append($hour);
+            $hour.append('<span class=""timetable-hour-label>' + i + ':00</span>');
+            this.$hours.append($hour);
             $hour.css({
               height: options.hourHeight
             });
           }
         };
+
+        Timetable.prototype.showEvents = function(){
+          for(var i = 0, l = this.data.length; i < l; i++){
+            var hall = new Hall(this.data[i]);
+            this.$halls.append(hall.getNode());
+          }
+        };
+
 
         return Timetable;
       }());
