@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<title>JqueryTimaTable</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+
+	<div class="timetable" timetable>
+	  <div class="timetable-hours" data-hours>
+	    <div data-header>
+	    
+	    </div>
+	    <div data-hours-blocks>
+	    
+	    </div>
+	  </div>
+	  <div class="timetable-halls" data-halls>
+	    
+	  </div>
+	  
+	</div>
+
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="timetable.js"></script>
+	<script type="text/javascript">
+		var halls = [{
+		    title: 'Hall 1',
+		    events: [{
+		      title: 'Event 0',
+		      start:   '2016-06-19T21:00:00Z',
+		      end: '2016-06-19T04:00:00Z'
+		    },{
+		      title: 'Event 1',
+		      start:   '2016-06-19T10:00:00Z',
+		      end: '2016-06-19T16:00:00Z'
+		    },{
+		      title: 'Event 2',
+		      start:   '2016-06-19T16:00:00Z',
+		      end: '2016-06-19T20:00:00Z'
+		    }]
+		  }, {
+		    title: 'Hall 2',
+		    events: [{
+		      title: 'Event 3',
+		      start:   '2016-06-19T10:00:00Z',
+		      end: '2016-06-19T16:00:00Z'
+		    },{
+		      title: 'Event 4',
+		      start:   '2016-06-19T16:00:00Z',
+		      end: '2016-06-19T20:00:00Z'
+		    }]
+		  }];
+		$('[timetable]').timetable(halls);
+	</script>
+</body>
+</html>

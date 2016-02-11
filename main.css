@@ -1,0 +1,57 @@
+.timetable {
+	position: relative;
+	overflow: auto;
+}
+.timetable-hours{
+	width:100%;
+	margin-top:30px;
+}
+.timetable-hour {
+	width: 100%;
+	position: relative;
+}
+.timetable-hour:after{
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50px;
+	right:0;
+	display: block;
+	height: 1px;
+	background: #f5f5f5;
+}
+.timetable-halls{
+	position: absolute;
+	left:50px;
+	top:0;
+	bottom: 0;
+}
+.timetable-halls:after{
+	content:'';
+	display: block;
+	clear: both;
+}
+.timetable-hall{
+	position: relative;
+	width: 200px;
+	float:left;
+}
+.timetable-hall + .timetable-hall {
+	margin-left: 1px;
+}
+.timetable-hall-header{
+	height: 30px;
+	overflow:hidden;
+	text-align: center;
+}
+.timetable-hall-events{
+	position: relative;
+}
+.timetable-event {
+	position: absolute;
+	width: 100%;
+	padding: 10px;
+	box-sizing:border-box;
+	background: #00CDB1;
+	opacity: .9;
+}
