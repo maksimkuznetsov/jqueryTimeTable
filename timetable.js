@@ -94,8 +94,14 @@
 
       var Timetable = (function(){
         var Timetable = function($root, data){
-          var $hours = $root.find('[data-hours-blocks]'),
-              $halls = $root.find('[data-halls]');
+          var $hours = $('<div/>'),
+              $halls = $('<div/>');
+          $hours.addClass('timetable-hours');
+          $halls.addClass('timetable-halls');
+          $root
+            .append($hours)
+            .append($halls);
+            
           for(var i = 0, l = data.length; i < l; i++){
             var hall = new Hall(data[i]);
             $halls.append(hall.getNode());
