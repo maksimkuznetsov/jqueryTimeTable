@@ -98,12 +98,15 @@
           this.$content = $('<div/>');
           this.$hours = $('<div/>');
           this.$hallsWrap = $('<div/>');
+          this.$hallsScrollWrap = $('<div/>');
           this.$halls = $('<div/>');
           this.$content.addClass('timetable-content');
           this.$hours.addClass('timetable-hours');
           this.$hallsWrap.addClass('timetable-halls-wrap');
+          this.$hallsScrollWrap.addClass('timetable-halls-scroll-wrap');
           this.$halls.addClass('timetable-halls');
-          this.$hallsWrap.append(this.$halls);
+          this.$hallsScrollWrap.append(this.$halls);
+          this.$hallsWrap.append(this.$hallsScrollWrap);
           this.$content
             .append(this.$hours)
             .append(this.$hallsWrap);
@@ -114,6 +117,49 @@
           this.updateHoursScope();
           this.renderHours();
           this.showEvents();
+          this.setDragable();
+        };
+
+        Timetable.prototype.setDragable = function(){
+          var curXPos = null,
+              curDown = false,
+              $wrap = this.$hallsWrap,
+              $elem = this.$hallsScrollWrap,
+              elem = $elem[0];
+
+          window.addEventListener('mousemove', function(e){ 
+            if(curDown === true){
+              if(curXPos == null)
+                curXPos = e.pageX;
+              $elem.scrollLeft($elem.scrollLeft() + ((curXPos - e.pageX) / 16));
+            }
+          });
+
+          elem.addEventListener('mousedown', function(e){ 
+            curDown = true; 
+            $wrap.addClass('grabbing');
+          });
+          elem.addEventListener('mouseup', function(e){ 
+            curDown = false; 
+            curXPos = null; 
+            $wrap.removeClass('grabbing');
+          });
+          $elem.on('scroll', checkScrollable);
+          $(window).on('resize', checkScrollable);
+          checkScrollable()
+          function checkScrollable(){
+            if($elem.scrollLeft() > 0){
+              $wrap.addClass('scrollable-left');
+            } else {
+              $wrap.removeClass('scrollable-left');
+            }
+
+            if($elem.scrollLeft() < $elem[0].scrollWidth - $elem.width()){
+              $wrap.addClass('scrollable-right');
+            } else {
+              $wrap.removeClass('scrollable-right');
+            }
+          };
         };
 
         Timetable.prototype.updateHoursScope = function(){
@@ -146,6 +192,7 @@
               height: options.hourHeight
             });
           }
+
         };
 
         Timetable.prototype.countHallsWidth = function(){
@@ -168,4 +215,6 @@
       new Timetable($(this), timetableData);
     });
   };
+
+
 }());
